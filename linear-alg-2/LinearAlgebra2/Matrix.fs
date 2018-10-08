@@ -15,6 +15,7 @@ module public Matrix =
 
   type public MatrixT = MatrixT of ( MatrixStyle *
                                    int *
+                                   int *
                                    (VectorT) list
                                  )
 
@@ -30,7 +31,7 @@ module public Matrix =
         match v2 with
           | VectorT (n2, c2) ->
             if (n1 = n2) 
-            then Some (MatrixT (RowVectors, n1, List.map (subprod c2) c1 |> (List.map (mkrow n1)) ))
+            then Some (MatrixT (RowVectors, n1, n2, List.map (subprod c2) c1 |> (List.map (mkrow n1)) ))
             else None
 
   // Take a list of lists to a zip-list type scenario where
@@ -55,15 +56,15 @@ module public Matrix =
   // Takes a matrix and returns an equivalent in row vector style.
   let public toRow mat =
     match mat with
-      | (MatrixT (style, n, vecs)) ->
+      | (MatrixT (style, m, n, vecs)) ->
         match style with
           | RowVectors -> mat
-          | ColVectors -> toListofList vecs |> zippo |> (revectorize n) |> (fun nvecs -> MatrixT (RowVectors, n, nvecs))
+          | ColVectors -> toListofList vecs |> zippo |> (revectorize m) |> (fun nvecs -> MatrixT (RowVectors, n, m, nvecs))
 
   // Takes a matrix and returns an equivalent in column matrix style.
   let public toCol mat =
     match mat with
-      | (MatrixT (style, n, vecs)) ->
+      | (MatrixT (style, m, n, vecs)) ->
         match style with
           | ColVectors -> mat
-          | RowVectors -> toListofList vecs |> zippo |> (revectorize n) |> (fun nvecs -> MatrixT (ColVectors, n, nvecs))
+          | RowVectors -> toListofList vecs |> zippo |> (revectorize m) |> (fun nvecs -> MatrixT (ColVectors, n, m, nvecs))
