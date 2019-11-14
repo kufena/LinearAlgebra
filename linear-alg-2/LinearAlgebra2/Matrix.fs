@@ -130,15 +130,17 @@ module public Matrix =
       match wr with
       | (c, sg, clist) -> sg * computedeterminant (row + 1) (sz - 1) vecs (wraps clist [])
 
+    let sign (n, x) = if (n % 2 = 0) then -x else x
+
     if (sz = 2)
     // our size is 2 - just get the 2x2 - there should only be one.
     then List.head mywraps |> wrapTo2x2
     // otherwise get a value for each wrap and combine by addition.
-    else List.map handleWrap mywraps |> List.fold (+) 0.0
+    else List.map handleWrap mywraps |> List.zip [1 .. List.length mywraps] |> List.map sign |> List.fold (+) 0.0
   
 
   // A more general determinant calculator.
-  let public determinant m p q sz =
+  let public determinant m = //p q sz =
     let colMatrix = toCol m
 
     let (style,rows,cols,vecs) = 

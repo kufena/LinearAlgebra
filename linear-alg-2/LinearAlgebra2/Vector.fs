@@ -26,3 +26,5 @@ module public Vector =
     let xmult a = x * a
     match y with
     | (VectorT (n,c)) -> VectorT (n, List.map xmult c)
+
+  let toVec l = VectorT (List.length l, l)
